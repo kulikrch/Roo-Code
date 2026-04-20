@@ -1,10 +1,26 @@
 // npx vitest services/tree-sitter/__tests__/languageParser.spec.ts
 
 import * as path from "path"
+import fs from "fs"
 import { loadRequiredLanguageParsers } from "../languageParser"
 
+function resolveWasmDir() {
+	const candidates = [
+		path.join(__dirname, "../../../node_modules/tree-sitter-wasms/out"),
+		path.join(__dirname, "../../../../node_modules/tree-sitter-wasms/out"),
+	]
+
+	for (const dir of candidates) {
+		if (fs.existsSync(dir)) {
+			return dir
+		}
+	}
+
+	return candidates[0]
+}
+
 // Path to the directory containing the WASM files.
-const WASM_DIR = path.join(__dirname, "../../../node_modules/tree-sitter-wasms/out")
+const WASM_DIR = resolveWasmDir()
 
 describe("loadRequiredLanguageParsers", () => {
 	it("should load Python parser for .py files", async () => {

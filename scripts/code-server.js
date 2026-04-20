@@ -2,9 +2,9 @@
  * Serve script for Roo Code extension development
  *
  * Usage:
- *   pnpm code-server:install    # Build and install the extension into code-server
+ *   npm run code-server:install    # Build and install the extension into code-server
  *
- * After making code changes, run `pnpm code-server:install` again and reload the window
+ * After making code changes, run `npm run code-server:install` again and reload the window
  * (Cmd+Shift+P → "Developer: Reload Window")
  */
 
@@ -44,7 +44,7 @@ async function main() {
 	// Build vsix to temp directory
 	log(`Building vsix to ${VSIX_PATH}...`)
 	try {
-		execSync(`pnpm vsix -- --out "${VSIX_PATH}"`, { stdio: "inherit" })
+		execSync(`npm run vsix -- --out "${VSIX_PATH}"`, { stdio: "inherit" })
 		logSuccess("Build complete")
 	} catch (error) {
 		logError("Build failed")

@@ -112,7 +112,14 @@ export function copyPaths(copyPaths: [string, string, CopyPathOptions?][], srcDi
 }
 
 export function copyWasms(srcDir: string, distDir: string): void {
-	const nodeModulesDir = path.join(srcDir, "node_modules")
+	const nodeModulesDirCandidates = [path.join(srcDir, "node_modules"), path.join(srcDir, "..", "node_modules")]
+	const nodeModulesDir = nodeModulesDirCandidates.find((candidate) =>
+		fs.existsSync(path.join(candidate, "tiktoken", "lite", "tiktoken_bg.wasm")),
+	)
+
+	if (!nodeModulesDir) {
+		throw new Error(`Could not resolve node_modules directory with required WASM dependencies from ${srcDir}`)
+	}
 
 	fs.mkdirSync(distDir, { recursive: true })
 

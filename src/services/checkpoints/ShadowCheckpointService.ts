@@ -40,7 +40,10 @@ function createSanitizedGit(baseDir: string): SimpleGit {
 			key === "GIT_OBJECT_DIRECTORY" ||
 			key === "GIT_ALTERNATE_OBJECT_DIRECTORIES" ||
 			key === "GIT_CEILING_DIRECTORIES" ||
-			key === "GIT_TEMPLATE_DIR"
+			key === "GIT_TEMPLATE_DIR" ||
+			key === "EDITOR" ||
+			key === "GIT_EDITOR" ||
+			key === "VISUAL"
 		) {
 			removedVars.push(`${key}=${value}`)
 			continue
@@ -62,6 +65,9 @@ function createSanitizedGit(baseDir: string): SimpleGit {
 	const options: Partial<SimpleGitOptions> = {
 		baseDir,
 		config: [],
+		unsafe: {
+			allowUnsafeTemplateDir: true,
+		},
 	}
 
 	// Create git instance and set the sanitized environment

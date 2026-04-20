@@ -260,7 +260,8 @@ async function publish() {
 		console.log("  This may take a moment...")
 
 		try {
-			execSync("NODE_ENV=production pnpm tsup --outDir npm/dist", {
+			execSync("npx tsup --outDir npm/dist", {
+				env: { ...process.env, NODE_ENV: "production" },
 				cwd: rootDir,
 				stdio: "inherit",
 			})
@@ -336,7 +337,7 @@ async function publish() {
 		console.error("   1. Ensure you are logged in to npm: npm whoami")
 		console.error("   2. Check your npm permissions for this package")
 		console.error("   3. Verify the package name is not already taken")
-		console.error("   4. Make sure all dependencies are installed: pnpm install")
+		console.error("   4. Make sure all dependencies are installed: npm install")
 		process.exit(1)
 	}
 }

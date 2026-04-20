@@ -1,14 +1,18 @@
 {
 	"name": "roo-code",
-	"packageManager": "pnpm@10.8.1",
+	"packageManager": "npm@11.6.0",
+	"workspaces": [
+		"src",
+		"webview-ui",
+		"apps/*",
+		"packages/*"
+	],
 	"engines": {
 		"node": "20.19.2"
 	},
 	"scripts": {
-		"preinstall": "node scripts/bootstrap.mjs",
 		"prepare": "husky",
-		"install": "node scripts/bootstrap.mjs",
-		"install:all": "node scripts/bootstrap.mjs",
+		"install:all": "npm install",
 		"lint": "turbo lint --log-order grouped --output-logs new-only",
 		"check-types": "turbo check-types --log-order grouped --output-logs new-only",
 		"test": "turbo test --log-order grouped --output-logs new-only",
@@ -19,14 +23,14 @@
 		"vsix": "turbo vsix --log-order grouped --output-logs new-only",
 		"vsix:nightly": "turbo vsix:nightly --log-order grouped --output-logs new-only",
 		"clean": "turbo clean --log-order grouped --output-logs new-only && rimraf dist out bin .vite-port .turbo",
-		"install:vsix": "pnpm install --frozen-lockfile && pnpm clean && pnpm vsix && node scripts/install-vsix.js",
-		"install:vsix:nightly": "pnpm install --frozen-lockfile && pnpm clean && pnpm vsix:nightly && node scripts/install-vsix.js --nightly",
+		"install:vsix": "npm ci && npm run clean && npm run vsix && node scripts/install-vsix.js",
+		"install:vsix:nightly": "npm ci && npm run clean && npm run vsix:nightly && node scripts/install-vsix.js --nightly",
 		"code-server:install": "node scripts/code-server.js",
 		"knip": "knip --include files",
-		"npm:publish:types": "pnpm --filter @roo-code/types npm:publish"
+		"npm:publish:types": "npm run npm:publish --workspace @roo-code/types"
 	},
 	"devDependencies": {
-		"@roo-code/config-typescript": "workspace:^",
+		"@roo-code/config-typescript": "*",
 		"@types/glob": "^9.0.0",
 		"@types/node": "^24.1.0",
 		"@vscode/vsce": "3.3.2",
@@ -50,21 +54,16 @@
 			"prettier --write"
 		]
 	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"@vscode/ripgrep"
-		],
-		"overrides": {
-			"tar-fs": ">=3.1.1",
-			"esbuild": ">=0.25.0",
-			"undici": ">=5.29.0",
-			"brace-expansion": "^2.0.2",
-			"form-data": ">=4.0.4",
-			"bluebird": ">=3.7.2",
-			"glob": ">=11.1.0",
-			"@types/react": "^18.3.23",
-			"@types/react-dom": "^18.3.5",
-			"zod": "3.25.76"
-		}
+	"overrides": {
+		"tar-fs": ">=3.1.1",
+		"undici": ">=5.29.0",
+		"brace-expansion": "^2.0.2",
+		"form-data": ">=4.0.4",
+		"bluebird": ">=3.7.2",
+		"@types/react": "^18.3.23",
+		"@types/react-dom": "^18.3.5",
+		"zod": "3.25.76"
 	}
 }
+
+
