@@ -5,14 +5,14 @@ if [ "$branch" = "main" ]; then
   exit 1
 fi
 
-# Detect if running on Windows and use pnpm.cmd, otherwise use pnpm.
+# Detect if running on Windows and use npm.cmd, otherwise use npm.
 if [ "$OS" = "Windows_NT" ]; then
-  pnpm_cmd="pnpm.cmd"
+  npm_cmd="npm.cmd"
 else
-  if command -v pnpm >/dev/null 2>&1; then
-    pnpm_cmd="pnpm"
+  if command -v npm >/dev/null 2>&1; then
+    npm_cmd="npm"
   else
-    pnpm_cmd="npx pnpm"
+    npm_cmd="npx npm"
   fi
 fi
 
@@ -24,4 +24,4 @@ else
 fi
 
 $npx_cmd lint-staged
-$pnpm_cmd lint
+$npm_cmd run lint
