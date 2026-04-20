@@ -6,6 +6,7 @@ import {
 	type GenerateContentConfig,
 	type GroundingMetadata,
 	FunctionCallingConfigMode,
+	ThinkingLevel,
 } from "@google/genai"
 import type { JWTInput } from "google-auth-library"
 
@@ -31,6 +32,21 @@ import { BaseProvider } from "./base-provider"
 
 type GeminiHandlerOptions = ApiHandlerOptions & {
 	isVertex?: boolean
+}
+
+function mapThinkingLevelToSdk(level: "minimal" | "low" | "medium" | "high" | undefined): ThinkingLevel | undefined {
+	switch (level) {
+		case "minimal":
+			return ThinkingLevel.MINIMAL
+		case "low":
+			return ThinkingLevel.LOW
+		case "medium":
+			return ThinkingLevel.MEDIUM
+		case "high":
+			return ThinkingLevel.HIGH
+		default:
+			return undefined
+	}
 }
 
 export class GeminiHandler extends BaseProvider implements SingleCompletionHandler {
@@ -152,10 +168,17 @@ export class GeminiHandler extends BaseProvider implements SingleCompletionHandl
 			? (this.options.modelTemperature ?? info.defaultTemperature ?? 1)
 			: info.defaultTemperature
 
+		const normalizedThinkingConfig: GenerateContentConfig["thinkingConfig"] | undefined = thinkingConfig
+			? {
+					...thinkingConfig,
+					thinkingLevel: mapThinkingLevelToSdk(thinkingConfig.thinkingLevel),
+				}
+			: undefined
+
 		const config: GenerateContentConfig = {
 			systemInstruction,
 			httpOptions: this.options.googleGeminiBaseUrl ? { baseUrl: this.options.googleGeminiBaseUrl } : undefined,
-			thinkingConfig,
+			thinkingConfig: normalizedThinkingConfig,
 			maxOutputTokens,
 			temperature: temperatureConfig,
 			...(tools.length > 0 ? { tools } : {}),
