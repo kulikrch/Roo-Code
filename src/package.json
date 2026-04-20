@@ -448,6 +448,7 @@
 		"clean": "rimraf README.md CHANGELOG.md LICENSE dist logs mock .turbo"
 	},
 	"dependencies": {
+		"@dotenvx/dotenvx": "^1.44.2",
 		"@ai-sdk/amazon-bedrock": "^4.0.51",
 		"@ai-sdk/baseten": "^1.0.31",
 		"@ai-sdk/deepseek": "^2.0.18",
